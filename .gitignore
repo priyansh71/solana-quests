@@ -4,5 +4,3 @@ node_modules/
 */.env
 .DS_Store
 */.DS_Store
-keys.js
-*.keys.js

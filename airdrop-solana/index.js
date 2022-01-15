@@ -5,10 +5,13 @@ const {
     Keypair,
     LAMPORTS_PER_SOL,
    } = require("@solana/web3.js");
-const Keys = require('../keys');
 
-// Using our private key
-const secretKey = Keys._keypair.secretKey;
+const newPair = new Keypair();
+console.log(newPair);
+
+const publicKey = new PublicKey(newPair._keypair.publicKey).toString();
+const secretKey = newPair._keypair.secretKey;
+
 
 // Creating the wallet balance function
 const getWalletBalance = async () => {
@@ -19,7 +22,7 @@ const getWalletBalance = async () => {
         const connection = new Connection(url, "confirmed");
 
         // Create the wallet object from secretKey
-        const myWallet = await Keypair.fromSecretKey(Uint8Array.from(secretKey));
+        const myWallet = await Keypair.fromSecretKey(secretKey);
 
         // Query the balance of that wallet
         const walletBalance = await connection.getBalance(
@@ -43,9 +46,10 @@ const airDropSol = async () => {
         const walletKeyPair = await Keypair.fromSecretKey(Uint8Array.from(secretKey));
 
         // Creating a transaction
+        console.log(`-- Airdropping 2 SOL --`);
         const fromAirDropSignature = await connection.requestAirdrop(
             new PublicKey(walletKeyPair.publicKey),
-            0.8 * LAMPORTS_PER_SOL
+            2 * LAMPORTS_PER_SOL
         );
         await connection.confirmTransaction(fromAirDropSignature);
 
@@ -56,6 +60,8 @@ const airDropSol = async () => {
 
 // Testing
 const driverFunction = async () => {
+    await getWalletBalance();
+
     await airDropSol();
     await getWalletBalance();
 }

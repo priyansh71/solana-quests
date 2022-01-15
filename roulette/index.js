@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const chalk = require("chalk");
-const Keys = require('../keys');
 const { Keypair } = require('@solana/web3.js');
 
 const { getReturnAmount, totalAmtToBePaid, randomNumber } = require('./helper');
@@ -9,7 +8,14 @@ const { getWalletBalance, transferSOL, airDropSol } = require('./solana');
 console.log('Welcome to SOL staking roulette!');
 console.log(chalk.yellow`The max bidding amount is 2 SOL.`);
 
-const userSecretKey = Keys._keypair.secretKey;
+const userSecretKey = [
+    56,  19, 158, 188, 118, 195, 196, 137,  46, 154, 189,
+   229,  65, 161, 119, 191, 218, 165,  81, 146,  57, 118,
+   120,  75,  61,  37, 127,   6,   4,   2, 166, 223,  73,
+   181,  21,   9, 182, 138,  76, 224,  10, 169, 118, 109,
+    60,  25, 216,  14,  59,  43, 232, 134, 217, 190, 161,
+   241, 149,  79, 178, 171, 108,  85, 143, 161
+ ]
 const userWallet = Keypair.fromSecretKey(Uint8Array.from(userSecretKey));
 
 //treasury

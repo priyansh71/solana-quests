@@ -1,4 +1,3 @@
-const Keys = require('../keys');
 const {
     PublicKey,
     LAMPORTS_PER_SOL,
@@ -7,8 +6,6 @@ const web3 = require("@solana/web3.js");
 
 
 // Create a wallet from which a player will be paying or receiving.
-const secretKey = Keys._keypair.secretKey;
-const myWallet= web3.Keypair.fromSecretKey(Uint8Array.from(secretKey));
 const url = web3.clusterApiUrl("devnet");
 
 
@@ -22,7 +19,7 @@ const transferSOL = async (fromWalletInstance ,to, transferAmt) =>{
         const transaction= new web3.Transaction().add(
 
             web3.SystemProgram.transfer({
-                fromPubkey: myWallet.publicKey ,
+                fromPubkey: fromWalletInstance.publicKey ,
                 toPubkey: new PublicKey(to.publicKey.toString()),
                 lamports: transferAmt* LAMPORTS_PER_SOL
             })
@@ -33,7 +30,7 @@ const transferSOL = async (fromWalletInstance ,to, transferAmt) =>{
         const signature= await web3.sendAndConfirmTransaction(
             connection, 
             transaction,
-            [fromWalletInstance, to]
+            [fromWalletInstance]
         );
         
         return signature
