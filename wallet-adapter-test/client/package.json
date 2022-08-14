@@ -1,0 +1,28 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@project-serum/anchor": "0.24.2",
+    "@solana/spl-token": "0.2.0",
+    "@solana/wallet-adapter-base": "^0.9.10",
+    "@solana/wallet-adapter-react": "^0.15.9",
+    "@solana/wallet-adapter-react-ui": "^0.9.12",
+    "@solana/wallet-adapter-wallets": "^0.17.2",
+    "@solana/web3.js": "^1.52.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.0.1",
+    "vite": "^3.0.7"
+  }
+}
