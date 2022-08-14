@@ -1,7 +1,7 @@
 import { WalletNotConnectedError } from "@solana/wallet-adapter-base";
 import { web3 } from "@project-serum/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { SystemProgram, PublicKey, SYSVAR_RENT_PUBKEY, sendAndConfirmTransaction } from "@solana/web3.js";
+import { SystemProgram, PublicKey, SYSVAR_RENT_PUBKEY } from "@solana/web3.js";
 import {
   TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
@@ -52,7 +52,7 @@ const Mint = ({ connection, program, provider }) => {
     const mintKey = web3.Keypair.generate();
     const lamports = await connection.getMinimumBalanceForRentExemption(MINT_SIZE);
 
-    console.log(connection.getMinimumBalanceForRentExemption(MINT_SIZE))
+    // get the address of associated token account given a mint and an owner
     let NftTokenAccount = await getAssociatedTokenAddress(
       mintKey.publicKey,
       publicKey
@@ -61,24 +61,27 @@ const Mint = ({ connection, program, provider }) => {
     console.log("NFT Account: ", NftTokenAccount.toBase58());
 
     const mint_tx = new web3.Transaction().add(
+      // Creating Mint Account
       web3.SystemProgram.createAccount({
-        fromPubkey: publicKey,
-        newAccountPubkey: mintKey.publicKey,
-        space: MINT_SIZE,
-        programId: TOKEN_PROGRAM_ID,
-        lamports,
+        fromPubkey: publicKey,                  // owner (user)
+        newAccountPubkey: mintKey.publicKey,    // Public key
+        space: MINT_SIZE,                       // space
+        programId: TOKEN_PROGRAM_ID,            // owner (program)
+        lamports,                               // lamports
       }),
+      // define some mint account params
       createInitializeMintInstruction(
-        mintKey.publicKey,
-        0,
-        publicKey,
-        publicKey
+        mintKey.publicKey,      // token mint account
+        0,                      // decimals in token account
+        publicKey,              // mint authority
+        publicKey               // freeze authority
       ),
-      createAssociatedTokenAccountInstruction(
-        publicKey,
-        NftTokenAccount,
-        publicKey,
-        mintKey.publicKey
+      // create associated token account
+      createAssociatedTokenAccountInstruction(  
+        publicKey,                        // payer
+        NftTokenAccount,                  // token account
+        publicKey,                        // owner of the account
+        mintKey.publicKey,                // mint
       )
     );
 
